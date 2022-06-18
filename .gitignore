@@ -36,7 +36,6 @@
 /.vs
 /.vscode
 */CMakeFiles
-/out
 
 #build files
 cmake_install.cmake
