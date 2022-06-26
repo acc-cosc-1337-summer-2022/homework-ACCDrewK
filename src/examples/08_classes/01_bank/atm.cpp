@@ -1,5 +1,6 @@
 // atm.cpp
 #include "atm.h"
+#include "bank_account.h"
 #include <cctype>
 // #include <cstdio>  // NULL
 #include <chrono> // time
@@ -7,7 +8,8 @@
 #include <random> // rand and srand
 
 void ATM::display_balance() {
-  std::cout << "Your balance is $" << account.getBalance() << std::endl;
+  std::cout << "Your balance is $" << accounts[account_index].getBalance()
+            << std::endl;
 }
 
 void ATM::make_deposit() {
@@ -18,17 +20,26 @@ void ATM::make_deposit() {
   int amount{dist(atm_rand)};
   std::cout << "Validate deposit amount: $" << amount
             << std::endl; // between 1 and 100
-  account.deposit(amount);
+  accounts[account_index].deposit(amount);
 }
 
 void ATM::make_withdraw() {
   int amount;
   std::cout << "Enter withdraw amount: ";
   std::cin >> amount;
-  account.withdraw(amount);
+  accounts[account_index].withdraw(amount);
 }
 
-// FREE FUNCTIONS
+void ATM::scan_card() {
+  using std::chrono::steady_clock;
+  int seed = steady_clock::now().time_since_epoch().count();
+  std::mt19937_64 atm_rand(seed);
+  std::uniform_int_distribution<int> dist(0, accounts.size());
+
+  int account_index{dist(atm_rand)};
+}
+
+// FREE FUNCTIONS--------------------------------------
 
 void display_menu() {
   std::cout << "1. Make deposit" << std::endl;
@@ -40,36 +51,43 @@ void display_menu() {
   //   std::cin >> choice;
 }
 
-void run_menu() {
+void run_menu(ATM &atm) {
   auto choice{'y'};
-  auto menu_choice{0};
-  Account account{500}; // not how it should work, quick and dirty example
-  ATM atm{account};
+  int menu_choice{0};
+  auto confirm = 'N';
   do {
-    display_menu();
-    std::cin >> menu_choice;
-    // call ATM Functions
-    handle_transaction(atm, menu_choice);
-    std::cout << "Continue? ";
-    std::cin >> choice;
-  } while (toupper(choice) == 'Y');
+    atm.scan_card();
+    //   Account account{500}; // not how it should work, quick and dirty
+    //   example ATM atm{account};
+    do {
+      display_menu();
+      std::cin >> menu_choice;
+      transaction menu_choice_ = static_cast<transaction>(menu_choice);
+      // call ATM Functions
+      handle_transaction(atm, menu_choice_);
+      std::cout << "Do another transaction? (y/n) ";
+      std::cin >> choice;
+    } while (toupper(choice) == 'Y');
+    std::cout << "Do you really wish to log out? (Y/N) ";
+    std::cin >> confirm;
+  } while (toupper(confirm) != 'Y');
 }
 
-void handle_transaction(ATM &atm, int choice) {
+void handle_transaction(ATM &atm, transaction choice) {
   switch (choice) {
-  case 1:
+  case DEPOSIT:
     atm.make_deposit();
     break;
-  case 2:
+  case WITHDRAW:
     atm.make_withdraw();
     break;
-  case 3:
+  case DISPLAY:
     atm.display_balance();
     break;
-  case 4:
+  case EXIT:
     break;
   default:
     std::cout << "Invalid choice." << std::endl;
     break;
-  }
+  };
 }

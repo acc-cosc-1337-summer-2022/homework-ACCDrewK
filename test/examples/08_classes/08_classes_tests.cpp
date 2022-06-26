@@ -2,6 +2,8 @@
                           // in one cpp file
 #include "bank_account.h"
 #include "catch.hpp"
+#include <chrono>
+#include <random>
 
 TEST_CASE("Verify Test Configuration", "verification") {
   REQUIRE(true == true);
@@ -33,4 +35,13 @@ TEST_CASE("Test withdraw function") {
   account.deposit(50);
   account.withdraw(-1);
   REQUIRE(account.getBalance() == 100);
+}
+
+TEST_CASE("TEST random number generation") {
+  int seed = std::chrono::steady_clock::now().time_since_epoch().count();
+  std::mt19937_64 atm_rand(seed);
+  std::uniform_int_distribution<int> dist(0, 4);
+  int num{dist(atm_rand)};
+
+  REQUIRE((num >= 0 && num <= 4));
 }
