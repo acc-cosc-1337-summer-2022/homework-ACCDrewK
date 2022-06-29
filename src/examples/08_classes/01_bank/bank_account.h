@@ -3,9 +3,10 @@
 #define BANK_ACCOUNT_H
 #ifndef BRANCH_BANK_H
 #define BRANCH_BANK_H
+#include <iostream>
 
 enum transaction { DEPOSIT = 1, WITHDRAW = 2, DISPLAY = 3, EXIT = 4 };
-//enum class MENU_OPTION { DEPOSIT = 1, WITHDRAW = 2, DISPLAY = 3, EXIT = 4 };
+// enum class MENU_OPTION { DEPOSIT = 1, WITHDRAW = 2, DISPLAY = 3, EXIT = 4 };
 
 class Branch_bank {
 public:
@@ -20,15 +21,19 @@ private:
 class Account {
   friend void show_balance(Account &account);
   friend void Branch_bank::update_balance(double);
+  friend std::ostream &operator<<(std::ostream &out, const Account &account);
+  friend std::istream &operator>>(std::istream &in, Account &account);
 
 public:
-  Account() : Account(0.0) {}       // default constructor
-  Account(double b) : balance(b) {} /*for accounts with existing balance*/
-  int getBalance() const {          // balance += 20;
+  // Account() : Account(0.0) {}       // default constructor
+  Account() = default;
+  explicit Account(double b)
+      : balance(b) {}              /*for accounts with existing balance*/
+  virtual int getBalance() const { // balance += 20;
     return balance;
   }; // method, function
-  void deposit(double amount);
-  void withdraw(double amount);
+  virtual void deposit(double amount);
+  virtual void withdraw(double amount);
   static double get_bank_balance() { return bank_balance; }
 
 private:               // access specifier

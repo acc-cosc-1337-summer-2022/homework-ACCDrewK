@@ -13,6 +13,8 @@ int main() {
   // srand(time(NULL));
   Branch_bank b_bank(500);
   Account account(50);
+  cout << account;
+  std::cin >> account;
   cout << account.get_bank_balance() << "\n";
   b_bank.update_balance(25);
   cout << account.get_bank_balance() << endl;

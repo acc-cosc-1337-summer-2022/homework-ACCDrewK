@@ -2,6 +2,8 @@
                           // in one cpp file
 #include "bank_account.h"
 #include "catch.hpp"
+#include "checking_account.h"
+#include "savings_account.h"
 #include <chrono>
 #include <random>
 
@@ -10,12 +12,12 @@ TEST_CASE("Verify Test Configuration", "verification") {
 }
 
 TEST_CASE("Test bank initial value is 15") {
-  Account account;
-  REQUIRE(account.getBalance() == 0);
+  CheckingAccount account;
+  REQUIRE(account.getBalance() == 5);
 }
 
 TEST_CASE("Test account constructor") {
-  Account account(100);
+  CheckingAccount account{100};
   REQUIRE(account.getBalance() == 100);
 }
 

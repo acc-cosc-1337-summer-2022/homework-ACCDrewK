@@ -37,6 +37,7 @@ void ATM::scan_card() {
   std::uniform_int_distribution<int> dist(0, accounts.size());
 
   int account_index{dist(atm_rand)};
+  std::cout << account_index << std::endl;
 }
 
 // FREE FUNCTIONS--------------------------------------
