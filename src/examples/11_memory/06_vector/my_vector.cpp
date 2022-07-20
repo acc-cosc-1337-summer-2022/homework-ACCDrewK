@@ -12,7 +12,7 @@ Vector<T>::Vector(std::size_t s) : size(s), elements(new T[s]), capacity(s) {
 
 // Copy constructor
 template <typename T>
-Vector<T>::Vector(const Vector &v) : size{v.size}, elements{new T{v.size}} {
+Vector<T>::Vector(const Vector &v) : size{v.size}, elements{new T(v.size)} {
   /* 1. Initialize size for v2 */
   /* 2. Initialize memory for v2 */
   /* 3. Copy elements from v1 to v2 */
